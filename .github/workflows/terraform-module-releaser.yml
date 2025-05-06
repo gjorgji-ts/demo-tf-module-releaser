@@ -1,0 +1,29 @@
+name: Terraform - Module Releaser
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+    branches:
+      - main
+
+permissions:
+  contents: write # Required to create a release
+  pull-requests: write # Required to comment on PRs
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Terraform Module Releaser
+        uses: techpivot/terraform-module-releaser@v1
+        with:
+          major-keywords: breaking change
+          minor-keywords: feat
+          patch-keywords: fix,chore,docs
+          default-first-tag: v0.1.0
+          terraform-docs-version: v0.20.0
+          delete-legacy-tags: true
+          use-ssh-source-format: false
